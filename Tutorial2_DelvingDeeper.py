@@ -15,6 +15,7 @@ GitHub repo: https://github.com/Friends-of-Tracking-Data-FoTD/LaurieOnTracking
 """
 
 
+
 import Metrica_IO as mio
 import Metrica_Viz as mviz
 import Metrica_Velocities as mvel
@@ -107,7 +108,7 @@ for player in home_summary.index:
     # sprinting (greater than 7 m/s)
     player_distance = tracking_home.loc[ tracking_home[column] >= 7, column].sum()/25./1000
     sprinting.append( player_distance )
-    
+
 home_summary['Walking [km]'] = walking
 home_summary['Jogging [km]'] = jogging
 home_summary['Running [km]'] = running
@@ -129,12 +130,12 @@ for player in home_summary.index:
     player_sprints = np.diff( 1*( np.convolve( 1*(tracking_home[column]>=sprint_threshold), np.ones(sprint_window), mode='same' ) >= sprint_window ) )
     nsprints.append( np.sum( player_sprints == 1 ) )
 home_summary['# sprints'] = nsprints
-         
+
 # Plot the trajectories for each of player 10's sprints
 player = '10'
-column = 'Home_' + player + '_speed' # spped
-column_x = 'Home_' + player + '_x' # x position
-column_y = 'Home_' + player + '_y' # y position
+column = f'Home_{player}_speed'
+column_x = f'Home_{player}_x'
+column_y = f'Home_{player}_y'
 # same trick as before to find start and end indices of windows of size 'sprint_window' in which player speed was above the sprint_threshold
 player_sprints = np.diff( 1*( np.convolve( 1*(tracking_home[column]>=sprint_threshold), np.ones(sprint_window), mode='same' ) >= sprint_window ) )
 player_sprints_start = np.where( player_sprints == 1 )[0] - int(sprint_window/2) + 1 # adding sprint_window/2 because of the way that the convolution is centred
